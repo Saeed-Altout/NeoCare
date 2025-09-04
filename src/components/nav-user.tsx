@@ -5,8 +5,19 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +45,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const handleLogout = () => {
     // Clear any stored authentication data
@@ -102,13 +114,39 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
+            <DropdownMenuItem onClick={() => setShowLogoutDialog(true)}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <IconLogout className="h-5 w-5" />
+              Confirm Logout
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to log out? You will need to sign in again
+              to access your account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              <IconLogout className="mr-2 h-4 w-4" />
+              Log out
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SidebarMenu>
   );
 }
