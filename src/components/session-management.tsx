@@ -126,6 +126,31 @@ export function SessionManagement() {
       // Force re-render for progress bars of running sessions
       if (activeSessions.length > 0) {
         forceUpdate((prev) => prev + 1);
+
+        // Check if any running sessions should be completed
+        activeSessions.forEach((session) => {
+          const startTime = new Date(session.createdAt).getTime();
+          const currentTime = Date.now();
+          const durationMs = session.duration * 60 * 1000;
+          const elapsed = currentTime - startTime;
+
+          // If session time is up and still marked as running, update status
+          if (elapsed >= durationMs && session.status === "running") {
+            const updatedSession = {
+              ...session,
+              status: "completed" as const,
+              endedAt: new Date().toISOString(),
+            };
+            updateSession(session.id, updatedSession);
+            leaveSession(session.id); // Leave the session room
+
+            // Find patient name for notification
+            const patient = patients.find((p) => p.id === session.patientId);
+            toast.success(
+              `Session completed for ${patient?.fullName || "Patient"}`
+            );
+          }
+        });
       }
     }, 1000); // Update every second
 
@@ -138,7 +163,7 @@ export function SessionManagement() {
       clearInterval(progressInterval);
       clearInterval(refreshInterval);
     };
-  }, [activeSessions]);
+  }, [activeSessions, updateSession, leaveSession, patients]);
 
   // Join active sessions for real-time updates
   useEffect(() => {
@@ -244,14 +269,32 @@ export function SessionManagement() {
     resetForm();
   };
 
-  const filteredSessions = (sessions || []).filter((session) => {
-    const patient = (patients || []).find((p) => p.id === session.patientId);
-    const patientName = patient?.fullName || "";
-    return (
-      patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      session.id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const filteredSessions = (sessions || [])
+    .map((session) => {
+      // Ensure session has a valid status
+      if (!session.status || session.status.trim() === "") {
+        // Check if session should be completed based on time
+        const startTime = new Date(session.createdAt).getTime();
+        const currentTime = Date.now();
+        const durationMs = session.duration * 60 * 1000;
+        const elapsed = currentTime - startTime;
+
+        if (elapsed >= durationMs) {
+          return { ...session, status: "completed" as const };
+        } else {
+          return { ...session, status: "running" as const };
+        }
+      }
+      return session;
+    })
+    .filter((session) => {
+      const patient = (patients || []).find((p) => p.id === session.patientId);
+      const patientName = patient?.fullName || "";
+      return (
+        patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        session.id.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
 
   const getStatusBadge = (status: string) => {
     // Handle different possible status values
@@ -715,7 +758,7 @@ export function SessionManagement() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        {session.status ? (
+                        {session.status && session.status.trim() !== "" ? (
                           getStatusBadge(session.status)
                         ) : (
                           <Badge variant="secondary">Unknown</Badge>
