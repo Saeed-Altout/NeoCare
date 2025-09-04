@@ -87,7 +87,6 @@ export function SessionManagement() {
   const {
     sessions,
     activeSessions,
-    selectedSession,
     isLoading,
     error,
     setSessions,
@@ -101,7 +100,7 @@ export function SessionManagement() {
   } = useSessionsStore();
 
   const { patients, setPatients } = usePatientsStore();
-  const { getLatestMeasurement, getMeasurementStats } = useMeasurementsStore();
+  const { getLatestMeasurement } = useMeasurementsStore();
   const {
     connect,
     joinSession,
@@ -112,6 +111,7 @@ export function SessionManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<SessionFormData>(initialFormData);
   const [searchTerm, setSearchTerm] = useState("");
+  const [, forceUpdate] = useState(0);
 
   // Load data on component mount
   useEffect(() => {
@@ -119,6 +119,26 @@ export function SessionManagement() {
     loadPatients();
     connect(); // Connect to WebSocket for real-time updates
   }, []);
+
+  // Real-time progress tracking and session refresh
+  useEffect(() => {
+    const progressInterval = setInterval(() => {
+      // Force re-render for progress bars of running sessions
+      if (activeSessions.length > 0) {
+        forceUpdate((prev) => prev + 1);
+      }
+    }, 1000); // Update every second
+
+    const refreshInterval = setInterval(() => {
+      // Refresh sessions every 30 seconds to pick up status changes
+      loadSessions();
+    }, 30000);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(refreshInterval);
+    };
+  }, [activeSessions]);
 
   // Join active sessions for real-time updates
   useEffect(() => {
@@ -171,6 +191,9 @@ export function SessionManagement() {
       addSession(response.data);
       joinSession(response.data.id); // Join the new session room
       toast.success("Session started successfully");
+
+      // Refresh sessions list to ensure UI is up to date
+      await loadSessions();
 
       setIsDialogOpen(false);
       resetForm();
@@ -231,18 +254,27 @@ export function SessionManagement() {
   });
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
+    // Handle different possible status values
+    const normalizedStatus = status?.toLowerCase();
+
+    switch (normalizedStatus) {
       case "running":
+      case "active":
+      case "in_progress":
         return (
           <Badge className="bg-green-500 hover:bg-green-600">Running</Badge>
         );
       case "completed":
+      case "finished":
+      case "done":
         return (
           <Badge variant="outline" className="border-blue-500 text-blue-600">
             Completed
           </Badge>
         );
       case "stopped":
+      case "cancelled":
+      case "terminated":
         return (
           <Badge
             variant="outline"
@@ -252,7 +284,7 @@ export function SessionManagement() {
           </Badge>
         );
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary">{status || "Unknown"}</Badge>;
     }
   };
 
@@ -300,6 +332,18 @@ export function SessionManagement() {
     const remaining = Math.max(durationMs - elapsed, 0);
 
     return Math.ceil(remaining / 1000 / 60); // Convert to minutes
+  };
+
+  const formatRemainingTime = (minutes: number) => {
+    if (minutes <= 0) return "0m";
+
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${mins}m`;
+    }
+    return `${mins}m`;
   };
 
   return (
@@ -469,7 +513,6 @@ export function SessionManagement() {
                   (p) => p.id === session.patientId
                 );
                 const latestMeasurement = getLatestMeasurement(session.id);
-                const stats = getMeasurementStats(session.id);
                 const progress = calculateProgress(session);
                 const remainingTime = calculateRemainingTime(session);
 
@@ -501,8 +544,22 @@ export function SessionManagement() {
 
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div className="flex items-center gap-1">
-                          <IconClock className="h-3 w-3" />
-                          <span>{remainingTime}m left</span>
+                          <IconClock
+                            className={`h-3 w-3 ${
+                              remainingTime <= 0 ? "text-red-500" : ""
+                            }`}
+                          />
+                          <span
+                            className={
+                              remainingTime <= 0
+                                ? "text-red-500 font-semibold"
+                                : ""
+                            }
+                          >
+                            {remainingTime <= 0
+                              ? "Time up!"
+                              : `${formatRemainingTime(remainingTime)} left`}
+                          </span>
                         </div>
                         <div className="flex items-center gap-1">
                           {getModeIcon(session.mode)}
@@ -595,19 +652,20 @@ export function SessionManagement() {
                 <TableHead>Status</TableHead>
                 <TableHead>Duration</TableHead>
                 <TableHead>Started</TableHead>
+                <TableHead>Ended</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
+                  <TableCell colSpan={7} className="text-center py-8">
                     Loading sessions...
                   </TableCell>
                 </TableRow>
               ) : filteredSessions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
+                  <TableCell colSpan={7} className="text-center py-8">
                     {searchTerm
                       ? "No sessions found matching your search"
                       : "No sessions created yet"}
@@ -656,7 +714,13 @@ export function SessionManagement() {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell>{getStatusBadge(session.status)}</TableCell>
+                      <TableCell>
+                        {session.status ? (
+                          getStatusBadge(session.status)
+                        ) : (
+                          <Badge variant="secondary">Unknown</Badge>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <div className="space-y-1">
                           <div className="text-sm">
@@ -672,39 +736,54 @@ export function SessionManagement() {
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {formatDate(session.createdAt)}
-                        {session.endedAt && (
-                          <div>Ended: {formatDate(session.endedAt)}</div>
-                        )}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {session.endedAt ? formatDate(session.endedAt) : "-"}
                       </TableCell>
                       <TableCell className="text-right">
-                        {session.status === "running" && (
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <IconPlayerStop className="h-4 w-4 text-red-500" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Stop Session
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to stop this session?
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleStopSession(session)}
-                                  className="bg-red-600 hover:bg-red-700"
+                        <div className="flex items-center justify-end gap-1">
+                          {session.status === "running" ? (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  title="Stop Session"
                                 >
-                                  Stop Session
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        )}
+                                  <IconPlayerStop className="h-4 w-4 text-red-500" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Stop Session
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to stop this session?
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleStopSession(session)}
+                                    className="bg-red-600 hover:bg-red-700"
+                                  >
+                                    Stop Session
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              disabled
+                              title="Session Completed"
+                            >
+                              <IconActivity className="h-4 w-4 text-gray-400" />
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
