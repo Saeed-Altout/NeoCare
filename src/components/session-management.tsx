@@ -694,7 +694,7 @@ export function SessionManagement() {
         <CardHeader>
           <CardTitle>All Sessions</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="px-4">
           <Table>
             <TableHeader>
               <TableRow>
@@ -799,7 +799,6 @@ export function SessionManagement() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            asChild
                             title="View Details"
                           >
                             <Link to={`/dashboard/sessions/${session.id}`}>

@@ -35,15 +35,7 @@ import {
   IconSun,
   IconChartLine,
 } from "@tabler/icons-react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Area,
-  AreaChart,
-} from "recharts";
+import { XAxis, YAxis, CartesianGrid, Area, AreaChart } from "recharts";
 import {
   ChartContainer,
   ChartTooltip,
@@ -308,25 +300,14 @@ export default function SessionDetailsPage() {
   const temperatureChartConfig = {
     temperature: {
       label: "Temperature",
-      color: "hsl(var(--chart-1))",
+      color: "#ef4444", // Red color for temperature
     },
   } satisfies ChartConfig;
 
   const humidityChartConfig = {
     humidity: {
       label: "Humidity",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig;
-
-  const combinedChartConfig = {
-    temperature: {
-      label: "Temperature",
-      color: "hsl(var(--chart-1))",
-    },
-    humidity: {
-      label: "Humidity",
-      color: "hsl(var(--chart-2))",
+      color: "#3b82f6", // Blue color for humidity
     },
   } satisfies ChartConfig;
 
@@ -334,9 +315,9 @@ export default function SessionDetailsPage() {
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm">
-            <Link to="/dashboard/sessions">
+        <div className="flex flex-col gap-4">
+          <Button variant="ghost" size="sm" className="w-fit">
+            <Link to="/dashboard/sessions" className="flex items-center gap-2">
               <IconArrowLeft className="h-4 w-4 mr-2" />
               Back to Sessions
             </Link>
@@ -379,9 +360,9 @@ export default function SessionDetailsPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Session Info */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Patient Info */}
           <Card>
             <CardHeader>
@@ -598,8 +579,7 @@ export default function SessionDetailsPage() {
           )}
         </div>
 
-        {/* Charts */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Temperature Chart */}
           <Card>
             <CardHeader>
@@ -621,11 +601,11 @@ export default function SessionDetailsPage() {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
                       dataKey="time"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                       interval="preserveStartEnd"
                     />
                     <YAxis
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                       domain={["dataMin - 1", "dataMax + 1"]}
                     />
                     <ChartTooltip
@@ -678,10 +658,10 @@ export default function SessionDetailsPage() {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
                       dataKey="time"
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 10 }}
                       interval="preserveStartEnd"
                     />
-                    <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
+                    <YAxis tick={{ fontSize: 10 }} domain={[0, 100]} />
                     <ChartTooltip
                       content={
                         <ChartTooltipContent
@@ -706,83 +686,6 @@ export default function SessionDetailsPage() {
               ) : (
                 <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                   No humidity data available
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Combined Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <IconChartLine className="h-5 w-5" />
-                Combined Monitoring
-              </CardTitle>
-              <CardDescription>
-                Temperature and humidity trends comparison
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {chartData.length > 0 ? (
-                <ChartContainer
-                  config={combinedChartConfig}
-                  className="min-h-[350px]"
-                >
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="time"
-                      tick={{ fontSize: 12 }}
-                      interval="preserveStartEnd"
-                    />
-                    <YAxis
-                      yAxisId="temp"
-                      tick={{ fontSize: 12 }}
-                      orientation="left"
-                      domain={["dataMin - 1", "dataMax + 1"]}
-                    />
-                    <YAxis
-                      yAxisId="humidity"
-                      tick={{ fontSize: 12 }}
-                      orientation="right"
-                      domain={[0, 100]}
-                    />
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent
-                          labelFormatter={(value) => `Time: ${value}`}
-                          formatter={(value, name) => [
-                            name === "temperature"
-                              ? `${Number(value).toFixed(1)}°C`
-                              : `${Number(value).toFixed(1)}%`,
-                            name === "temperature" ? "Temperature" : "Humidity",
-                          ]}
-                        />
-                      }
-                    />
-                    <Line
-                      yAxisId="temp"
-                      type="monotone"
-                      dataKey="temperature"
-                      stroke="var(--color-temperature)"
-                      strokeWidth={2}
-                      dot={{ r: 3 }}
-                      name="temperature"
-                    />
-                    <Line
-                      yAxisId="humidity"
-                      type="monotone"
-                      dataKey="humidity"
-                      stroke="var(--color-humidity)"
-                      strokeWidth={2}
-                      dot={{ r: 3 }}
-                      name="humidity"
-                    />
-                  </LineChart>
-                </ChartContainer>
-              ) : (
-                <div className="flex items-center justify-center h-[350px] text-muted-foreground">
-                  No measurement data available
                 </div>
               )}
             </CardContent>
