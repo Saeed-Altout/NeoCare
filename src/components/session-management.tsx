@@ -12,6 +12,7 @@ import {
   IconAlertTriangle,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 import { useSessionsStore } from "@/stores/sessions-store";
 import { usePatientsStore } from "@/stores/patients-store";
@@ -138,11 +139,13 @@ export function SessionManagement() {
       clearError();
       const response = await getSessions();
       setSessions(response.data);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to load sessions";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load sessions";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -167,14 +170,17 @@ export function SessionManagement() {
       const response = await createSession(formData);
       addSession(response.data);
       joinSession(response.data.id); // Join the new session room
+      toast.success("Session started successfully");
 
       setIsDialogOpen(false);
       resetForm();
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to create session";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to create session";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -188,11 +194,14 @@ export function SessionManagement() {
       const response = await stopSession(session.id);
       updateSession(session.id, response.session);
       leaveSession(session.id); // Leave the session room
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to stop session";
-      setError(errorMessage);
-      toast.error(errorMessage);
+      toast.success("Session stopped successfully");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to stop session";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -212,8 +221,8 @@ export function SessionManagement() {
     resetForm();
   };
 
-  const filteredSessions = sessions.filter((session) => {
-    const patient = patients.find((p) => p.id === session.patientId);
+  const filteredSessions = (sessions || []).filter((session) => {
+    const patient = (patients || []).find((p) => p.id === session.patientId);
     const patientName = patient?.fullName || "";
     return (
       patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
