@@ -333,7 +333,7 @@ export function PatientManagement() {
                           setFormData((prev) => ({ ...prev, gender: value }))
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -368,7 +368,7 @@ export function PatientManagement() {
                           setFormData((prev) => ({ ...prev, bloodType: value }))
                         }
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select blood type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -478,7 +478,7 @@ export function PatientManagement() {
 
       {/* Patients Table */}
       <Card>
-        <CardContent className="p-0">
+        <CardContent className="px-4">
           <Table>
             <TableHeader>
               <TableRow>

@@ -435,7 +435,7 @@ export function SessionManagement() {
                         setFormData((prev) => ({ ...prev, patientId: value }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select patient" />
                       </SelectTrigger>
                       <SelectContent>
@@ -495,7 +495,7 @@ export function SessionManagement() {
                         setFormData((prev) => ({ ...prev, mode: value }))
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
