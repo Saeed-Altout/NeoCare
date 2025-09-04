@@ -9,6 +9,10 @@ import { SignUpPage } from "@/pages/auth/sign-up";
 import { WebsiteLayout } from "@/layouts/website";
 import { HomePage } from "@/pages/website/home";
 
+// Dashboard Pages
+import { DashboardLayout } from "@/layouts/dashboard";
+import { DashboardPage } from "@/pages/dashboard";
+
 // Not Found Page
 import { NotFoundPage } from "@/pages/not-found";
 
@@ -22,6 +26,9 @@ export default function App() {
         <Route path="/auth" element={<AuthLayout />}>
           <Route path="sign-in" element={<SignInPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
+        </Route>
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
