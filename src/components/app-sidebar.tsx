@@ -86,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link to="/dashboard">
                 <IconStethoscope className="!size-5" />
-                <span className="text-base font-semibold">Jaundice Care</span>
+                <span className="text-base font-semibold">NeoCare</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

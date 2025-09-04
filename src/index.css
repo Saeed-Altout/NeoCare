@@ -172,17 +172,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@layer utilities {
-  .container {
-    @apply max-w-7xl py-10 mx-auto px-4 md:px-6 lg:px-8 border-x border-border/60;
-  }
-
-  .section {
-    @apply border-b border-border/60 bg-background overflow-hidden;
-  }
-
-  .paragraph {
-    @apply text-sm sm:text-base text-muted-foreground;
-  }
-}

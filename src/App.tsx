@@ -18,6 +18,8 @@ import { SessionsPage } from "@/pages/dashboard/sessions";
 import SessionDetailsPage from "@/pages/dashboard/session-details";
 import { ArduinoControlPage } from "@/pages/dashboard/arduino-control";
 import { SettingsPage } from "@/pages/dashboard/settings";
+import AccountPage from "@/pages/dashboard/account";
+import NotificationsPage from "@/pages/dashboard/notifications";
 
 // Not Found Page
 import { NotFoundPage } from "@/pages/not-found";
@@ -41,6 +43,8 @@ export default function App() {
           <Route path="sessions/:sessionId" element={<SessionDetailsPage />} />
           <Route path="arduino" element={<ArduinoControlPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="account" element={<AccountPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
           <Route path="legacy" element={<DashboardPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
