@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { SEO, pageSEO } from "@/components/seo";
 import {
   IconChartBar,
   IconCpu,
@@ -211,259 +212,266 @@ export function TechnologyPage() {
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
-        <div className="relative container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <div className="space-y-4">
-              <Badge variant="outline" className="mx-auto">
-                <IconCpu className="mr-1 h-3 w-3" />
-                Advanced Technology
-              </Badge>
-              <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                Precision Engineering for{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                  Medical Excellence
-                </span>
-              </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-                Explore the cutting-edge technology and engineering excellence
-                that powers the NeoCare phototherapy system.
-              </p>
+    <>
+      <SEO {...pageSEO.technology} />
+      <div className="min-h-screen">
+        {/* Hero Section */}
+        <section className="relative py-20 lg:py-32 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
+          <div className="relative container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center space-y-8">
+              <div className="space-y-4">
+                <Badge variant="outline" className="mx-auto">
+                  <IconCpu className="mr-1 h-3 w-3" />
+                  Advanced Technology
+                </Badge>
+                <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
+                  Precision Engineering for{" "}
+                  <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                    Medical Excellence
+                  </span>
+                </h1>
+                <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                  Explore the cutting-edge technology and engineering excellence
+                  that powers the NeoCare phototherapy system.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Technical Specifications */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <Badge variant="outline">
-              <IconSettings className="mr-1 h-3 w-3" />
-              Technical Specifications
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Detailed{" "}
-              <span className="text-blue-600">System Specifications</span>
-            </h2>
-          </div>
+        {/* Technical Specifications */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <Badge variant="outline">
+                <IconSettings className="mr-1 h-3 w-3" />
+                Technical Specifications
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Detailed{" "}
+                <span className="text-blue-600">System Specifications</span>
+              </h2>
+            </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {technicalSpecs.map((category, index) => (
-              <Card key={index} className="shadow-lg">
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`p-2 rounded-lg bg-muted ${category.color}`}
-                    >
-                      <category.icon className="h-6 w-6" />
-                    </div>
-                    <CardTitle className="text-xl">
-                      {category.category}
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {category.specs.map((spec, idx) => (
+            <div className="grid lg:grid-cols-2 gap-8">
+              {technicalSpecs.map((category, index) => (
+                <Card key={index} className="shadow-lg">
+                  <CardHeader>
+                    <div className="flex items-center space-x-3">
                       <div
-                        key={idx}
-                        className="flex justify-between items-center py-2 border-b border-border/40 last:border-0"
+                        className={`p-2 rounded-lg bg-muted ${category.color}`}
                       >
-                        <span className="text-sm font-medium text-muted-foreground">
-                          {spec.label}
-                        </span>
-                        <span className="text-sm font-bold">{spec.value}</span>
+                        <category.icon className="h-6 w-6" />
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* System Architecture */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <Badge variant="outline">
-              <IconCpu className="mr-1 h-3 w-3" />
-              System Architecture
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Advanced <span className="text-green-600">Hardware Design</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Modular architecture designed for reliability, scalability, and
-              ease of maintenance.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {systemArchitecture.map((component, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-lg bg-muted">
-                      <component.icon className="h-6 w-6 text-blue-600" />
+                      <CardTitle className="text-xl">
+                        {category.category}
+                      </CardTitle>
                     </div>
-                    <CardTitle className="text-lg">
-                      {component.component}
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    {component.description}
-                  </p>
-                  <div className="space-y-2">
-                    {component.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center space-x-2">
-                        <IconCheck className="h-4 w-4 text-green-600" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Software & Platforms */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <Badge variant="outline">
-              <IconCode className="mr-1 h-3 w-3" />
-              Software Platforms
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Modern <span className="text-purple-600">Software Stack</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {softwareFeatures.map((feature, index) => (
-              <Card
-                key={index}
-                className="text-center hover:shadow-lg transition-shadow"
-              >
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-3">
-                    <feature.icon className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                  <div className="space-y-1">
-                    {feature.technologies.map((tech, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Innovative Features */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <Badge variant="outline">
-              <IconBulb className="mr-1 h-3 w-3" />
-              Innovation
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Next-Generation{" "}
-              <span className="text-blue-600">Capabilities</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {innovativeFeatures.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
-                      <feature.icon className="h-6 w-6 text-blue-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {category.specs.map((spec, idx) => (
+                        <div
+                          key={idx}
+                          className="flex justify-between items-center py-2 border-b border-border/40 last:border-0"
+                        >
+                          <span className="text-sm font-medium text-muted-foreground">
+                            {spec.label}
+                          </span>
+                          <span className="text-sm font-bold">
+                            {spec.value}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">{feature.description}</p>
-                  <div className="space-y-2">
-                    {feature.benefits.map((benefit, idx) => (
-                      <div key={idx} className="flex items-center space-x-2">
-                        <IconCheck className="h-4 w-4 text-green-600" />
-                        <span className="text-sm">{benefit}</span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* System Architecture */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <Badge variant="outline">
+                <IconCpu className="mr-1 h-3 w-3" />
+                System Architecture
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Advanced <span className="text-green-600">Hardware Design</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Modular architecture designed for reliability, scalability, and
+                ease of maintenance.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {systemArchitecture.map((component, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 rounded-lg bg-muted">
+                        <component.icon className="h-6 w-6 text-blue-600" />
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      <CardTitle className="text-lg">
+                        {component.component}
+                      </CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-muted-foreground">
+                      {component.description}
+                    </p>
+                    <div className="space-y-2">
+                      {component.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center space-x-2">
+                          <IconCheck className="h-4 w-4 text-green-600" />
+                          <span className="text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Certifications */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <Badge variant="outline">
-              <IconShield className="mr-1 h-3 w-3" />
-              Certifications & Compliance
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold">
-              Industry <span className="text-green-600">Standards</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Full compliance with international medical device standards and
-              regulations.
-            </p>
-          </div>
+        {/* Software & Platforms */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <Badge variant="outline">
+                <IconCode className="mr-1 h-3 w-3" />
+                Software Platforms
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Modern <span className="text-purple-600">Software Stack</span>
+              </h2>
+            </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {certifications.map((cert, index) => (
-              <Card key={index} className="text-center">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <IconShield className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{cert.name}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {cert.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {softwareFeatures.map((feature, index) => (
+                <Card
+                  key={index}
+                  className="text-center hover:shadow-lg transition-shadow"
+                >
+                  <CardHeader>
+                    <div className="mx-auto w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-3">
+                      <feature.icon className="h-6 w-6 text-purple-600" />
+                    </div>
+                    <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      {feature.description}
+                    </p>
+                    <div className="space-y-1">
+                      {feature.technologies.map((tech, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8">
-              <Link to="/about" className="flex items-center gap-2">
-                Learn More About NeoCare
-                <IconArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
+        {/* Innovative Features */}
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <Badge variant="outline">
+                <IconBulb className="mr-1 h-3 w-3" />
+                Innovation
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Next-Generation{" "}
+                <span className="text-blue-600">Capabilities</span>
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {innovativeFeatures.map((feature, index) => (
+                <Card key={index} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
+                        <feature.icon className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-muted-foreground">
+                      {feature.description}
+                    </p>
+                    <div className="space-y-2">
+                      {feature.benefits.map((benefit, idx) => (
+                        <div key={idx} className="flex items-center space-x-2">
+                          <IconCheck className="h-4 w-4 text-green-600" />
+                          <span className="text-sm">{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* Certifications */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <Badge variant="outline">
+                <IconShield className="mr-1 h-3 w-3" />
+                Certifications & Compliance
+              </Badge>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Industry <span className="text-green-600">Standards</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Full compliance with international medical device standards and
+                regulations.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {certifications.map((cert, index) => (
+                <Card key={index} className="text-center">
+                  <CardContent className="p-6">
+                    <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconShield className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{cert.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {cert.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <Button size="lg" className="text-lg px-8">
+                <Link to="/about" className="flex items-center gap-2">
+                  Learn More About NeoCare
+                  <IconArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

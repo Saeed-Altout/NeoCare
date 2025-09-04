@@ -1,0 +1,70 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NeoCare Medical Technologies",
+  "url": "https://neocare.medical",
+  "logo": "https://neocare.medical/logo.png",
+  "description": "Leading manufacturer of advanced neonatal phototherapy systems for the treatment of jaundice in newborns.",
+  "foundingDate": "2020",
+  "industry": "Medical Device Manufacturing",
+  "numberOfEmployees": "50-100",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Medical Drive",
+    "addressLocality": "Healthcare City",
+    "postalCode": "12345",
+    "addressCountry": "US"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+1-555-123-4567",
+    "contactType": "customer service",
+    "email": "info@neocare.medical",
+    "availableLanguage": "English"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/neocare-medical",
+    "https://twitter.com/neocare_medical",
+    "https://www.facebook.com/neocare.medical"
+  ],
+  "makesOffer": {
+    "@type": "Offer",
+    "itemOffered": {
+      "@type": "MedicalDevice",
+      "name": "NeoCare Phototherapy System",
+      "description": "Advanced LED-based phototherapy system for neonatal jaundice treatment",
+      "medicalSpecialty": "Neonatology",
+      "purpose": "Treatment of neonatal jaundice",
+      "manufacturer": {
+        "@type": "Organization",
+        "name": "NeoCare Medical Technologies"
+      }
+    }
+  },
+  "hasCredential": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "FDA Approval",
+      "recognizedBy": {
+        "@type": "Organization",
+        "name": "U.S. Food and Drug Administration"
+      }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "CE Marking",
+      "recognizedBy": {
+        "@type": "Organization",
+        "name": "European Conformity"
+      }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "ISO 13485",
+      "recognizedBy": {
+        "@type": "Organization",
+        "name": "International Organization for Standardization"
+      }
+    }
+  ]
+}
