@@ -103,12 +103,7 @@ export function SessionManagement() {
 
   const { patients, setPatients } = usePatientsStore();
   const { getLatestMeasurement } = useMeasurementsStore();
-  const {
-    connect,
-    joinSession,
-    leaveSession,
-    stopSession: stopSessionWS,
-  } = useWebSocket();
+  const { connect, joinSession, leaveSession } = useWebSocket();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<SessionFormData>(initialFormData);
@@ -261,10 +256,6 @@ export function SessionManagement() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleStopSessionWS = (session: Session) => {
-    stopSessionWS(session.id);
   };
 
   const resetForm = () => {
@@ -672,13 +663,6 @@ export function SessionManagement() {
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleStopSessionWS(session)}
-                        >
-                          <IconPlayerStop className="h-3 w-3" />
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>

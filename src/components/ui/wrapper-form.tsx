@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Home } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { IconStethoscope } from "@tabler/icons-react";
 
 export function WrapperForm({
   title,
@@ -29,7 +30,7 @@ export function WrapperForm({
       <div className="flex items-center justify-center">
         <Button variant="outline" size="icon">
           <Link to="/">
-            <Home className="size-4" />
+            <IconStethoscope className="size-4" />
             <span className="sr-only">Home</span>
           </Link>
         </Button>
