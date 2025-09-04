@@ -30,8 +30,8 @@ export function JaundiceOverviewPage() {
   const { sessions, activeSessions, getActiveSessionsCount } =
     useSessionsStore();
   const { patients } = usePatientsStore();
-  const { measurements, getLatestMeasurement } = useMeasurementsStore();
-  const { status: arduinoStatus, currentMode, fanStatus } = useArduinoStore();
+  const { getLatestMeasurement } = useMeasurementsStore();
+  const { status: arduinoStatus, currentMode } = useArduinoStore();
   const { connect } = useWebSocket();
 
   useEffect(() => {
@@ -40,7 +40,6 @@ export function JaundiceOverviewPage() {
   }, []);
 
   // Calculate statistics
-  const totalSessions = sessions.length;
   const activeSessionsCount = getActiveSessionsCount();
   const completedSessions = sessions.filter(
     (s) => s.status === "completed"

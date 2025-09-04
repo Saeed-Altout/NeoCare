@@ -76,7 +76,7 @@ export const useArduinoStore = create<ArduinoStore>()(
       clearError: () => set({ error: null }),
       setLastCommand: (lastCommand) => set({ lastCommand }),
 
-      connect: (port, baudRate = 9600) => {
+      connect: () => {
         set({
           isConnecting: true,
           error: null,

@@ -5,20 +5,14 @@ import { toast } from "sonner";
 import {
   getPatients,
   createPatient,
-  updatePatient,
+  updatePatient as updatePatientAPI,
   deletePatient,
 } from "@/apis/patients";
 import { getSessions, createSession, stopSession } from "@/apis/sessions";
 import {
-  getMeasurements,
-  getSessionMeasurements,
-  getLatestMeasurement,
-} from "@/apis/measurements";
-import {
   connectArduino,
   disconnectArduino,
   getArduinoStatus,
-  getArduinoPorts,
   setArduinoMode,
   setArduinoFan,
   emergencyStopArduino,
@@ -27,7 +21,6 @@ import {
 // Import stores
 import { usePatientsStore } from "@/stores/patients-store";
 import { useSessionsStore } from "@/stores/sessions-store";
-import { useMeasurementsStore } from "@/stores/measurements-store";
 import { useArduinoStore } from "@/stores/arduino-store";
 
 // Patient hooks
@@ -41,14 +34,16 @@ export const usePatientsQuery = () => {
       setPatients(response.data);
       return response.data;
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to load patients";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    meta: {
+      onError: (error: any) => {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load patients";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      },
+      onLoading: () => setLoading(true),
+      onSettled: () => setLoading(false),
     },
-    onLoading: () => setLoading(true),
-    onSettled: () => setLoading(false),
   });
 };
 
@@ -75,10 +70,15 @@ export const useUpdatePatientMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdatePatientRequest }) =>
-      updatePatient(id, data),
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: UpdatePatientRequest;
+    }) => await updatePatientAPI(id, data),
     onSuccess: (data, variables) => {
-      updatePatient(variables.id, data.data);
+      updatePatient(variables.id, (data as any).data);
       queryClient.invalidateQueries({ queryKey: ["patients"] });
     },
     onError: (error: any) => {
@@ -109,7 +109,7 @@ export const useDeletePatientMutation = () => {
 
 // Session hooks
 export const useSessionsQuery = () => {
-  const { setSessions, setLoading, setError } = useSessionsStore();
+  const { setSessions, setError } = useSessionsStore();
 
   return useQuery({
     queryKey: ["sessions"],
@@ -118,11 +118,13 @@ export const useSessionsQuery = () => {
       setSessions(response.data);
       return response.data;
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to load sessions";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    meta: {
+      onError: (error: any) => {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load sessions";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      },
     },
     refetchInterval: 5000, // Refresh every 5 seconds for active sessions
   });
