@@ -41,11 +41,15 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
   Area,
   AreaChart,
 } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { useSessionsStore } from "@/stores/sessions-store";
 import { usePatientsStore } from "@/stores/patients-store";
 import { useMeasurementsStore } from "@/stores/measurements-store";
@@ -299,6 +303,32 @@ export default function SessionDetailsPage() {
   const latestMeasurement =
     sessionMeasurements[sessionMeasurements.length - 1] ||
     (sessionId ? getLatestMeasurement(sessionId) : null);
+
+  // Chart configurations
+  const temperatureChartConfig = {
+    temperature: {
+      label: "Temperature",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig;
+
+  const humidityChartConfig = {
+    humidity: {
+      label: "Humidity",
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
+
+  const combinedChartConfig = {
+    temperature: {
+      label: "Temperature",
+      color: "hsl(var(--chart-1))",
+    },
+    humidity: {
+      label: "Humidity",
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -583,7 +613,10 @@ export default function SessionDetailsPage() {
             </CardHeader>
             <CardContent>
               {chartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
+                <ChartContainer
+                  config={temperatureChartConfig}
+                  className="min-h-[300px]"
+                >
                   <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -595,22 +628,27 @@ export default function SessionDetailsPage() {
                       tick={{ fontSize: 12 }}
                       domain={["dataMin - 1", "dataMax + 1"]}
                     />
-                    <Tooltip
-                      labelFormatter={(value) => `Time: ${value}`}
-                      formatter={(value: number) => [
-                        `${value}°C`,
-                        "Temperature",
-                      ]}
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          labelFormatter={(value) => `Time: ${value}`}
+                          formatter={(value) => [
+                            `${Number(value).toFixed(1)}°C`,
+                            "Temperature",
+                          ]}
+                        />
+                      }
                     />
                     <Area
                       type="monotone"
                       dataKey="temperature"
-                      stroke="#ef4444"
-                      fill="#fef2f2"
+                      stroke="var(--color-temperature)"
+                      fill="var(--color-temperature)"
+                      fillOpacity={0.2}
                       strokeWidth={2}
                     />
                   </AreaChart>
-                </ResponsiveContainer>
+                </ChartContainer>
               ) : (
                 <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                   No temperature data available
@@ -632,7 +670,10 @@ export default function SessionDetailsPage() {
             </CardHeader>
             <CardContent>
               {chartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
+                <ChartContainer
+                  config={humidityChartConfig}
+                  className="min-h-[300px]"
+                >
                   <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -641,19 +682,27 @@ export default function SessionDetailsPage() {
                       interval="preserveStartEnd"
                     />
                     <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
-                    <Tooltip
-                      labelFormatter={(value) => `Time: ${value}`}
-                      formatter={(value: number) => [`${value}%`, "Humidity"]}
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          labelFormatter={(value) => `Time: ${value}`}
+                          formatter={(value) => [
+                            `${Number(value).toFixed(1)}%`,
+                            "Humidity",
+                          ]}
+                        />
+                      }
                     />
                     <Area
                       type="monotone"
                       dataKey="humidity"
-                      stroke="#3b82f6"
-                      fill="#eff6ff"
+                      stroke="var(--color-humidity)"
+                      fill="var(--color-humidity)"
+                      fillOpacity={0.2}
                       strokeWidth={2}
                     />
                   </AreaChart>
-                </ResponsiveContainer>
+                </ChartContainer>
               ) : (
                 <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                   No humidity data available
@@ -675,7 +724,10 @@ export default function SessionDetailsPage() {
             </CardHeader>
             <CardContent>
               {chartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={350}>
+                <ChartContainer
+                  config={combinedChartConfig}
+                  className="min-h-[350px]"
+                >
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis
@@ -695,18 +747,24 @@ export default function SessionDetailsPage() {
                       orientation="right"
                       domain={[0, 100]}
                     />
-                    <Tooltip
-                      labelFormatter={(value) => `Time: ${value}`}
-                      formatter={(value: number, name: string) => [
-                        name === "temperature" ? `${value}°C` : `${value}%`,
-                        name === "temperature" ? "Temperature" : "Humidity",
-                      ]}
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          labelFormatter={(value) => `Time: ${value}`}
+                          formatter={(value, name) => [
+                            name === "temperature"
+                              ? `${Number(value).toFixed(1)}°C`
+                              : `${Number(value).toFixed(1)}%`,
+                            name === "temperature" ? "Temperature" : "Humidity",
+                          ]}
+                        />
+                      }
                     />
                     <Line
                       yAxisId="temp"
                       type="monotone"
                       dataKey="temperature"
-                      stroke="#ef4444"
+                      stroke="var(--color-temperature)"
                       strokeWidth={2}
                       dot={{ r: 3 }}
                       name="temperature"
@@ -715,13 +773,13 @@ export default function SessionDetailsPage() {
                       yAxisId="humidity"
                       type="monotone"
                       dataKey="humidity"
-                      stroke="#3b82f6"
+                      stroke="var(--color-humidity)"
                       strokeWidth={2}
                       dot={{ r: 3 }}
                       name="humidity"
                     />
                   </LineChart>
-                </ResponsiveContainer>
+                </ChartContainer>
               ) : (
                 <div className="flex items-center justify-center h-[350px] text-muted-foreground">
                   No measurement data available
