@@ -1,3 +1,1 @@
-export function HomePage() {
-  return <div>HomePage</div>;
-}
+export { ModernHomePage as HomePage } from "./modern-homepage";

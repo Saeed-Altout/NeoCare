@@ -2,6 +2,32 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom biomedical theme enhancements */
+.biomedical-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Enhance animations for medical device aesthetics */
+@keyframes pulse-medical {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-medical {
+  animation: pulse-medical 2s ease-in-out infinite;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
