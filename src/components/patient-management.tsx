@@ -67,9 +67,11 @@ import {
   createPatient,
   updatePatient,
   deletePatient,
+  generatePatientId,
 } from "@/apis/patients";
 
 interface PatientFormData {
+  patientId: string;
   fullName: string;
   gender: "male" | "female";
   age: string;
@@ -80,6 +82,7 @@ interface PatientFormData {
 }
 
 const initialFormData: PatientFormData = {
+  patientId: "",
   fullName: "",
   gender: "male",
   age: "",
@@ -168,6 +171,7 @@ export function PatientManagement() {
   const handleEdit = (patient: Patient) => {
     selectPatient(patient);
     setFormData({
+      patientId: patient.patientId,
       fullName: patient.fullName,
       gender: patient.gender,
       age: patient.age,
@@ -209,11 +213,31 @@ export function PatientManagement() {
     resetForm();
   };
 
+  const handleAddPatient = async () => {
+    try {
+      setLoading(true);
+      // Generate new patient ID for new patients
+      const response = await generatePatientId();
+      setFormData((prev) => ({ ...prev, patientId: response.data.patientId }));
+      setIsDialogOpen(true);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to generate patient ID";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredPatients = (patients || []).filter(
     (patient) =>
       patient.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.motherName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone.includes(searchTerm)
+      patient.phone.includes(searchTerm) ||
+      patient.patientId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getGenderIcon = (gender: "male" | "female") => {
@@ -245,9 +269,9 @@ export function PatientManagement() {
             </div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => setIsDialogOpen(true)}>
+                <Button onClick={handleAddPatient} disabled={isLoading}>
                   <IconPlus className="mr-2 h-4 w-4" />
-                  Add Patient
+                  {isLoading ? "Generating ID..." : "Add Patient"}
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
@@ -262,6 +286,29 @@ export function PatientManagement() {
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Patient ID Field */}
+                  <div className="space-y-2">
+                    <Label htmlFor="patientId">Patient ID</Label>
+                    <Input
+                      id="patientId"
+                      value={formData.patientId}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          patientId: e.target.value,
+                        }))
+                      }
+                      placeholder="Auto-generated (e.g., NE001)"
+                      disabled={isEditing} // Disabled when editing existing patients
+                      className="font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {isEditing
+                        ? "Patient ID cannot be changed after creation"
+                        : "Automatically generated unique identifier"}
+                    </p>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="fullName">Full Name *</Label>
@@ -415,7 +462,7 @@ export function PatientManagement() {
           <div className="flex items-center gap-4 mb-4">
             <div className="flex-1">
               <Input
-                placeholder="Search patients by name, mother's name, or phone..."
+                placeholder="Search patients by ID, name, mother's name, or phone..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="max-w-sm"
@@ -466,6 +513,12 @@ export function PatientManagement() {
                           {getGenderIcon(patient.gender)}
                           <span className="font-medium">
                             {patient.fullName}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <IconUser className="h-3 w-3" />
+                          <span className="font-mono font-semibold text-primary">
+                            {patient.patientId}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">

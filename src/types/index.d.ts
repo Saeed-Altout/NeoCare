@@ -52,6 +52,7 @@ declare type ApiResponse<T> = {
 
 declare type Patient = {
   id: string;
+  patientId: string;
   fullName: string;
   gender: "male" | "female";
   age: string;
@@ -66,8 +67,13 @@ declare type Patient = {
 declare type CreatePatientRequest = Omit<
   Patient,
   "id" | "createdAt" | "updatedAt"
+> & {
+  patientId?: string; // Optional - auto-generated if not provided
+};
+
+declare type UpdatePatientRequest = Partial<
+  Omit<CreatePatientRequest, "patientId">
 >;
-declare type UpdatePatientRequest = Partial<CreatePatientRequest>;
 
 declare type Session = {
   id: string;

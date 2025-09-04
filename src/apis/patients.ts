@@ -74,3 +74,22 @@ export const updatePatient = async (
 export const deletePatient = async (id: string): Promise<void> => {
   await axios.delete(`/patients/${id}`);
 };
+
+export const generatePatientId = async (): Promise<
+  ApiResponse<{ patientId: string }>
+> => {
+  const response = await axios.get("/patients/generate-id");
+  // Check if response.data has patientId
+  if (
+    response.data &&
+    typeof response.data === "object" &&
+    "patientId" in response.data
+  ) {
+    return {
+      data: response.data,
+      status: "success",
+      message: "Patient ID generated successfully",
+    };
+  }
+  return response.data;
+};
