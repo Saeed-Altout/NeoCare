@@ -15,6 +15,7 @@ import { DashboardPage } from "@/pages/dashboard";
 import { JaundiceOverviewPage } from "@/pages/dashboard/jaundice-overview";
 import { PatientsPage } from "@/pages/dashboard/patients";
 import { SessionsPage } from "@/pages/dashboard/sessions";
+import SessionDetailsPage from "@/pages/dashboard/session-details";
 import { ArduinoControlPage } from "@/pages/dashboard/arduino-control";
 import { SettingsPage } from "@/pages/dashboard/settings";
 
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="overview" element={<JaundiceOverviewPage />} />
           <Route path="patients" element={<PatientsPage />} />
           <Route path="sessions" element={<SessionsPage />} />
+          <Route path="sessions/:sessionId" element={<SessionDetailsPage />} />
           <Route path="arduino" element={<ArduinoControlPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="legacy" element={<DashboardPage />} />

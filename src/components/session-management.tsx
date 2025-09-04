@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   IconPlayerPlay,
   IconPlayerStop,
@@ -10,6 +11,7 @@ import {
   IconBolt,
   IconUser,
   IconAlertTriangle,
+  IconEye,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -113,6 +115,39 @@ export function SessionManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [, forceUpdate] = useState(0);
 
+  // Load sessions function
+  const loadSessions = useCallback(async () => {
+    try {
+      setLoading(true);
+      clearError();
+      const response = await getSessions();
+      setSessions(response.data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load sessions";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [setLoading, clearError, setSessions, setError]);
+
+  // Load patients function
+  const loadPatients = useCallback(async () => {
+    try {
+      const response = await getPatients();
+      setPatients(response.data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load patients";
+        toast.error(errorMessage);
+      }
+    }
+  }, [setPatients]);
+
   // Load data on component mount
   useEffect(() => {
     loadSessions();
@@ -163,7 +198,7 @@ export function SessionManagement() {
       clearInterval(progressInterval);
       clearInterval(refreshInterval);
     };
-  }, [activeSessions, updateSession, leaveSession, patients]);
+  }, [activeSessions, updateSession, leaveSession, patients, loadSessions]);
 
   // Join active sessions for real-time updates
   useEffect(() => {
@@ -176,34 +211,7 @@ export function SessionManagement() {
         leaveSession(session.id);
       });
     };
-  }, [activeSessions]);
-
-  const loadSessions = async () => {
-    try {
-      setLoading(true);
-      clearError();
-      const response = await getSessions();
-      setSessions(response.data);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to load sessions";
-        setError(errorMessage);
-        toast.error(errorMessage);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadPatients = async () => {
-    try {
-      const response = await getPatients();
-      setPatients(response.data);
-    } catch (error) {
-      console.error("Failed to load patients:", error);
-    }
-  };
+  }, [activeSessions, joinSession, leaveSession]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -727,9 +735,12 @@ export function SessionManagement() {
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <IconUser className="h-4 w-4" />
-                            <span className="font-medium">
+                            <Link
+                              to={`/dashboard/sessions/${session.id}`}
+                              className="font-medium hover:text-primary hover:underline"
+                            >
                               {patient?.fullName || "Unknown"}
-                            </span>
+                            </Link>
                           </div>
                           <div className="text-sm text-muted-foreground">
                             {patient?.age} • {patient?.gender}
@@ -785,6 +796,16 @@ export function SessionManagement() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            asChild
+                            title="View Details"
+                          >
+                            <Link to={`/dashboard/sessions/${session.id}`}>
+                              <IconEye className="h-4 w-4" />
+                            </Link>
+                          </Button>
                           {session.status === "running" ? (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
