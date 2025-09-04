@@ -306,18 +306,26 @@ export function PatientManagement() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="bloodType">Blood Type *</Label>
-                      <Input
-                        id="bloodType"
+                      <Select
                         value={formData.bloodType}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            bloodType: e.target.value,
-                          }))
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({ ...prev, bloodType: value }))
                         }
-                        placeholder="e.g., A+, O-, AB+"
-                        required
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select blood type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="A+">A+</SelectItem>
+                          <SelectItem value="A-">A-</SelectItem>
+                          <SelectItem value="B+">B+</SelectItem>
+                          <SelectItem value="B-">B-</SelectItem>
+                          <SelectItem value="AB+">AB+</SelectItem>
+                          <SelectItem value="AB-">AB-</SelectItem>
+                          <SelectItem value="O+">O+</SelectItem>
+                          <SelectItem value="O-">O-</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
