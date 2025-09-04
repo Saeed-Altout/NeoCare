@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 
 interface SEOProps {
   title?: string;
@@ -26,6 +26,37 @@ const defaultSEO = {
   author: "NeoCare Medical Technologies",
 };
 
+// Helper function to update meta tags
+const updateMetaTag = (name: string, content: string, property?: boolean) => {
+  const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+  let element = document.querySelector(selector) as HTMLMetaElement;
+  
+  if (!element) {
+    element = document.createElement("meta");
+    if (property) {
+      element.setAttribute("property", name);
+    } else {
+      element.setAttribute("name", name);
+    }
+    document.head.appendChild(element);
+  }
+  
+  element.setAttribute("content", content);
+};
+
+// Helper function to update link tags
+const updateLinkTag = (rel: string, href: string) => {
+  let element = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+  
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    document.head.appendChild(element);
+  }
+  
+  element.setAttribute("href", href);
+};
+
 export function SEO({
   title,
   description,
@@ -48,59 +79,72 @@ export function SEO({
     author: author || defaultSEO.author,
   };
 
-  return (
-    <Helmet>
-      {/* Primary Meta Tags */}
-      <title>{seo.title}</title>
-      <meta name="title" content={seo.title} />
-      <meta name="description" content={seo.description} />
-      <meta name="keywords" content={seo.keywords} />
-      <meta name="author" content={seo.author} />
-      <link rel="canonical" href={seo.url} />
+  useEffect(() => {
+    // Update document title
+    document.title = seo.title;
 
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={seo.url} />
-      <meta property="og:title" content={seo.title} />
-      <meta property="og:description" content={seo.description} />
-      <meta property="og:image" content={seo.image} />
-      <meta property="og:site_name" content="NeoCare" />
-      <meta property="og:locale" content="en_US" />
+    // Update primary meta tags
+    updateMetaTag("title", seo.title);
+    updateMetaTag("description", seo.description);
+    updateMetaTag("keywords", seo.keywords);
+    updateMetaTag("author", seo.author);
 
-      {/* Article specific meta tags */}
-      {type === "article" && (
-        <>
-          {publishedTime && (
-            <meta property="article:published_time" content={publishedTime} />
-          )}
-          {modifiedTime && (
-            <meta property="article:modified_time" content={modifiedTime} />
-          )}
-          {author && <meta property="article:author" content={author} />}
-          {section && <meta property="article:section" content={section} />}
-          {tags &&
-            tags.map((tag) => (
-              <meta key={tag} property="article:tag" content={tag} />
-            ))}
-        </>
-      )}
+    // Update canonical link
+    updateLinkTag("canonical", seo.url);
 
-      {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={seo.url} />
-      <meta property="twitter:title" content={seo.title} />
-      <meta property="twitter:description" content={seo.description} />
-      <meta property="twitter:image" content={seo.image} />
+    // Update Open Graph meta tags
+    updateMetaTag("og:type", type, true);
+    updateMetaTag("og:url", seo.url, true);
+    updateMetaTag("og:title", seo.title, true);
+    updateMetaTag("og:description", seo.description, true);
+    updateMetaTag("og:image", seo.image, true);
+    updateMetaTag("og:site_name", "NeoCare", true);
+    updateMetaTag("og:locale", "en_US", true);
 
-      {/* Additional meta tags */}
-      <meta name="theme-color" content="#2563eb" />
-      <meta name="msapplication-TileColor" content="#2563eb" />
-      <meta name="application-name" content="NeoCare" />
-      <meta name="apple-mobile-web-app-title" content="NeoCare" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    </Helmet>
-  );
+    // Update Twitter meta tags
+    updateMetaTag("twitter:card", "summary_large_image", true);
+    updateMetaTag("twitter:url", seo.url, true);
+    updateMetaTag("twitter:title", seo.title, true);
+    updateMetaTag("twitter:description", seo.description, true);
+    updateMetaTag("twitter:image", seo.image, true);
+
+    // Update additional meta tags
+    updateMetaTag("theme-color", "#2563eb");
+    updateMetaTag("msapplication-TileColor", "#2563eb");
+    updateMetaTag("application-name", "NeoCare");
+    updateMetaTag("apple-mobile-web-app-title", "NeoCare");
+    updateMetaTag("apple-mobile-web-app-capable", "yes");
+    updateMetaTag("apple-mobile-web-app-status-bar-style", "default");
+
+    // Handle article-specific meta tags
+    if (type === "article") {
+      if (publishedTime) {
+        updateMetaTag("article:published_time", publishedTime, true);
+      }
+      if (modifiedTime) {
+        updateMetaTag("article:modified_time", modifiedTime, true);
+      }
+      if (author) {
+        updateMetaTag("article:author", author, true);
+      }
+      if (section) {
+        updateMetaTag("article:section", section, true);
+      }
+      if (tags) {
+        // Remove existing article:tag meta tags
+        const existingTags = document.querySelectorAll('meta[property="article:tag"]');
+        existingTags.forEach(tag => tag.remove());
+        
+        // Add new article:tag meta tags
+        tags.forEach(tag => {
+          updateMetaTag("article:tag", tag, true);
+        });
+      }
+    }
+  }, [seo.title, seo.description, seo.keywords, seo.image, seo.url, seo.author, type, publishedTime, modifiedTime, section, tags]);
+
+  // This component doesn't render anything
+  return null;
 }
 
 // Predefined SEO configs for different pages
