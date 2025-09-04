@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Auth Components
 import { AuthGuard } from "@/components/auth-guard";
 import { AdminRoute } from "@/components/protected-route";
+import { GuestRoute } from "@/components/guest-route";
 
 // Auth Pages
 import { AuthLayout } from "@/layouts/auth";
@@ -36,7 +37,14 @@ export default function App() {
           <Route path="/" element={<WebsiteLayout />}>
             <Route index element={<HomePage />} />
           </Route>
-          <Route path="/auth" element={<AuthLayout />}>
+          <Route
+            path="/auth"
+            element={
+              <GuestRoute>
+                <AuthLayout />
+              </GuestRoute>
+            }
+          >
             <Route path="sign-in" element={<SignInPage />} />
             <Route path="sign-up" element={<SignUpPage />} />
           </Route>

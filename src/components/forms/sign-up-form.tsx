@@ -39,7 +39,7 @@ export function SignUpForm() {
   return (
     <WrapperForm
       title="Create an Account"
-      description="Join Flexify to get started with your account."
+      description="Join NeoCare to get started with your account."
       href="/auth/sign-in"
       label="Sign In"
       message="Already have an account?"

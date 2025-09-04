@@ -4,8 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconShield, IconUser, IconCrown } from "@tabler/icons-react";
 
 export function AuthStatus() {
-  const { user, isAuthenticated, isAdmin, checkAuth, checkAdmin } =
-    useAuthStore();
+  const { user, checkAuth, checkAdmin } = useAuthStore();
 
   if (!checkAuth()) {
     return (
