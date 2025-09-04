@@ -21,7 +21,7 @@ interface PatientsStore {
 
 export const usePatientsStore = create<PatientsStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       patients: [],
       selectedPatient: null,
       isLoading: false,

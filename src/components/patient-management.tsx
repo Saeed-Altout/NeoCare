@@ -60,6 +60,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Separator } from "@/components/ui/separator";
+import { AxiosError } from "axios";
 
 import {
   getPatients,
@@ -104,10 +105,10 @@ export function PatientManagement() {
     clearError,
   } = usePatientsStore();
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [formData, setFormData] = useState<PatientFormData>(initialFormData);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Load patients on component mount
   useEffect(() => {
@@ -120,11 +121,13 @@ export function PatientManagement() {
       clearError();
       const response = await getPatients();
       setPatients(response.data);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to load patients";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to load patients";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -140,19 +143,23 @@ export function PatientManagement() {
       if (isEditing && selectedPatient) {
         const response = await updatePatient(selectedPatient.id, formData);
         updatePatientInStore(selectedPatient.id, response.data);
+        toast.success("Patient updated successfully");
       } else {
         const response = await createPatient(formData);
         addPatient(response.data);
+        toast.success("Patient created successfully");
       }
 
       setIsDialogOpen(false);
       resetForm();
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        `Failed to ${isEditing ? "update" : "create"} patient`;
-      setError(errorMessage);
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message ||
+          `Failed to ${isEditing ? "update" : "create"} patient`;
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -179,11 +186,13 @@ export function PatientManagement() {
       clearError();
       await deletePatient(patient.id);
       removePatient(patient.id);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to delete patient";
-      setError(errorMessage);
-      toast.error(errorMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorMessage =
+          error.response?.data?.message || "Failed to delete patient";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
