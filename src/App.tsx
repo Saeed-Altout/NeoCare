@@ -13,6 +13,9 @@ import { SignUpPage } from "@/pages/auth/sign-up";
 // Website Pages
 import { WebsiteLayout } from "@/layouts/website";
 import { HomePage } from "@/pages/website/home";
+import { AboutPage } from "@/pages/website/about";
+import { FeaturesPage } from "@/pages/website/features";
+import { TechnologyPage } from "@/pages/website/technology";
 
 // Dashboard Pages
 import { DashboardLayout } from "@/layouts/dashboard";
@@ -36,6 +39,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<WebsiteLayout />}>
             <Route index element={<HomePage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="features" element={<FeaturesPage />} />
+            <Route path="technology" element={<TechnologyPage />} />
           </Route>
           <Route
             path="/auth"

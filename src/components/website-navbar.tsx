@@ -21,10 +21,9 @@ export function WebsiteNavbar() {
 
   const navigation = [
     { name: "Home", href: "/" },
-    { name: "About", href: "#about" },
-    { name: "Features", href: "#features" },
-    { name: "Technology", href: "#technology" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/about" },
+    { name: "Features", href: "/features" },
+    { name: "Technology", href: "/technology" },
   ];
 
   return (
@@ -74,7 +73,7 @@ export function WebsiteNavbar() {
                   </Link>
                 </Button>
                 <Button size="sm">
-                  <Link to="/auth/sign-up">
+                  <Link to="/auth/sign-up" className="flex items-center gap-2">
                     <IconUserPlus className="mr-2 h-4 w-4 flex items-center gap-2" />
                     Sign Up
                   </Link>

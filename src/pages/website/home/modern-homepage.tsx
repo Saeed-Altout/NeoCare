@@ -16,9 +16,6 @@ import {
   IconArrowRight,
   IconCheck,
   IconStar,
-  IconMail,
-  IconPhone,
-  IconMapPin,
   IconStethoscope,
 } from "@tabler/icons-react";
 
@@ -117,14 +114,14 @@ export function ModernHomePage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg px-8">
-                  <Link to="#features" className="flex items-center gap-2">
+                  <Link to="/features" className="flex items-center gap-2">
                     Explore Features
                     <IconArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8">
-                  <Link to="#contact" className="flex items-center gap-2">
-                    Contact Us
+                  <Link to="/about" className="flex items-center gap-2">
+                    Learn More
                   </Link>
                 </Button>
               </div>
@@ -332,73 +329,30 @@ export function ModernHomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20">
+      {/* Call to Action Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-green-600">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center space-y-4 mb-16">
-              <Badge variant="outline">
-                <IconMail className="mr-1 h-3 w-3" />
-                Get in Touch
-              </Badge>
-              <h2 className="text-3xl lg:text-4xl font-bold">
-                Ready to Transform{" "}
-                <span className="text-blue-600">Neonatal Care</span>?
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white">
+                Ready to Transform Neonatal Care?
               </h2>
-              <p className="text-xl text-muted-foreground">
-                Contact us to learn more about NeoCare and how it can benefit
-                your facility.
+              <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+                Join hundreds of healthcare facilities worldwide that trust
+                NeoCare for superior phototherapy treatment.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
-                    <IconMail className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <CardTitle>Email</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">info@neocare.com</p>
-                  <p className="text-muted-foreground">support@neocare.com</p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-4">
-                    <IconPhone className="h-6 w-6 text-green-600" />
-                  </div>
-                  <CardTitle>Phone</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  <p className="text-muted-foreground">24/7 Support</p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="mx-auto w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mb-4">
-                    <IconMapPin className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <CardTitle>Address</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">123 Medical Drive</p>
-                  <p className="text-muted-foreground">
-                    Healthcare City, HC 12345
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="text-center mt-12">
-              <Button size="lg" className="text-lg px-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary">
                 <Link to="/auth/sign-up" className="flex items-center gap-2">
                   Get Started Today
                   <IconArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline">
+                <Link to="/technology" className="flex items-center gap-2">
+                  View Technology
                 </Link>
               </Button>
             </div>

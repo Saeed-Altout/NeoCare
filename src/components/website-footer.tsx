@@ -15,10 +15,9 @@ export function WebsiteFooter() {
 
   const quickLinks = [
     { name: "Home", href: "/" },
-    { name: "About", href: "#about" },
-    { name: "Features", href: "#features" },
-    { name: "Technology", href: "#technology" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/about" },
+    { name: "Features", href: "/features" },
+    { name: "Technology", href: "/technology" },
   ];
 
   const supportLinks = [
