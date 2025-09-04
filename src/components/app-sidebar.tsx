@@ -1,26 +1,25 @@
-import * as React from "react"
+import * as React from "react";
 import {
-  IconCamera,
+  IconActivity,
+  IconBolt,
   IconChartBar,
   IconDashboard,
   IconDatabase,
-  IconFileAi,
   IconFileDescription,
-  IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
+  IconUser,
   IconUsers,
-} from "@tabler/icons-react"
+  IconStethoscope,
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -29,85 +28,65 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Dr. Admin",
+    email: "admin@jaundice-system.com",
+    avatar: "/avatars/admin.jpg",
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: "Overview",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Patients",
+      url: "/dashboard/patients",
+      icon: IconUser,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
+      title: "Sessions",
+      url: "/dashboard/sessions",
+      icon: IconActivity,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Arduino Control",
+      url: "/dashboard/arduino",
+      icon: IconBolt,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
-      icon: IconCamera,
+      title: "Treatment Monitoring",
+      icon: IconStethoscope,
       isActive: true,
-      url: "#",
+      url: "/dashboard/sessions",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Active Sessions",
+          url: "/dashboard/sessions",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Session History",
+          url: "/dashboard/sessions",
         },
       ],
     },
     {
-      title: "Proposal",
+      title: "Patient Records",
       icon: IconFileDescription,
-      url: "#",
+      url: "/dashboard/patients",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "All Patients",
+          url: "/dashboard/patients",
         },
         {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
+          title: "Recent Patients",
+          url: "/dashboard/patients",
         },
       ],
     },
@@ -131,22 +110,22 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
+      name: "Patient Database",
+      url: "/dashboard/patients",
       icon: IconDatabase,
     },
     {
-      name: "Reports",
-      url: "#",
+      name: "Session Reports",
+      url: "/dashboard/sessions",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
+      name: "System Analytics",
+      url: "/dashboard/legacy",
+      icon: IconChartBar,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -158,9 +137,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+              <a href="/dashboard">
+                <IconStethoscope className="!size-5" />
+                <span className="text-base font-semibold">Jaundice Care</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -175,5 +154,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

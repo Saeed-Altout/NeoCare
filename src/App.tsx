@@ -12,6 +12,10 @@ import { HomePage } from "@/pages/website/home";
 // Dashboard Pages
 import { DashboardLayout } from "@/layouts/dashboard";
 import { DashboardPage } from "@/pages/dashboard";
+import { JaundiceOverviewPage } from "@/pages/dashboard/jaundice-overview";
+import { PatientsPage } from "@/pages/dashboard/patients";
+import { SessionsPage } from "@/pages/dashboard/sessions";
+import { ArduinoControlPage } from "@/pages/dashboard/arduino-control";
 
 // Not Found Page
 import { NotFoundPage } from "@/pages/not-found";
@@ -28,7 +32,12 @@ export default function App() {
           <Route path="sign-up" element={<SignUpPage />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<DashboardPage />} />
+          <Route index element={<JaundiceOverviewPage />} />
+          <Route path="overview" element={<JaundiceOverviewPage />} />
+          <Route path="patients" element={<PatientsPage />} />
+          <Route path="sessions" element={<SessionsPage />} />
+          <Route path="arduino" element={<ArduinoControlPage />} />
+          <Route path="legacy" element={<DashboardPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
