@@ -16,6 +16,7 @@ import { JaundiceOverviewPage } from "@/pages/dashboard/jaundice-overview";
 import { PatientsPage } from "@/pages/dashboard/patients";
 import { SessionsPage } from "@/pages/dashboard/sessions";
 import { ArduinoControlPage } from "@/pages/dashboard/arduino-control";
+import { SettingsPage } from "@/pages/dashboard/settings";
 
 // Not Found Page
 import { NotFoundPage } from "@/pages/not-found";
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="patients" element={<PatientsPage />} />
           <Route path="sessions" element={<SessionsPage />} />
           <Route path="arduino" element={<ArduinoControlPage />} />
+          <Route path="settings" element={<SettingsPage />} />
           <Route path="legacy" element={<DashboardPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

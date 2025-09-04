@@ -200,7 +200,7 @@ export function PatientManagement() {
     resetForm();
   };
 
-  const filteredPatients = patients.filter(
+  const filteredPatients = (patients || []).filter(
     (patient) =>
       patient.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.motherName.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -1,18 +1,13 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import {
   IconActivity,
   IconBolt,
-  IconChartBar,
   IconDashboard,
   IconDatabase,
-  IconFileDescription,
-  IconHelp,
-  IconInnerShadowTop,
   IconReport,
-  IconSearch,
   IconSettings,
   IconUser,
-  IconUsers,
   IconStethoscope,
 } from "@tabler/icons-react";
 
@@ -58,54 +53,11 @@ const data = {
       icon: IconBolt,
     },
   ],
-  navClouds: [
-    {
-      title: "Treatment Monitoring",
-      icon: IconStethoscope,
-      isActive: true,
-      url: "/dashboard/sessions",
-      items: [
-        {
-          title: "Active Sessions",
-          url: "/dashboard/sessions",
-        },
-        {
-          title: "Session History",
-          url: "/dashboard/sessions",
-        },
-      ],
-    },
-    {
-      title: "Patient Records",
-      icon: IconFileDescription,
-      url: "/dashboard/patients",
-      items: [
-        {
-          title: "All Patients",
-          url: "/dashboard/patients",
-        },
-        {
-          title: "Recent Patients",
-          url: "/dashboard/patients",
-        },
-      ],
-    },
-  ],
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
     },
   ],
   documents: [
@@ -118,11 +70,6 @@ const data = {
       name: "Session Reports",
       url: "/dashboard/sessions",
       icon: IconReport,
-    },
-    {
-      name: "System Analytics",
-      url: "/dashboard/legacy",
-      icon: IconChartBar,
     },
   ],
 };
@@ -137,10 +84,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/dashboard">
+              <Link to="/dashboard">
                 <IconStethoscope className="!size-5" />
                 <span className="text-base font-semibold">Jaundice Care</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
