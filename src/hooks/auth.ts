@@ -7,14 +7,27 @@ import { signIn, signUp, signOut, getUser } from "@/apis/auth";
 import { useAuthStore } from "@/stores/auth-store";
 
 export const useSignInMutation = () => {
+  const navigate = useNavigate();
+  const { setUser, setToken } = useAuthStore();
+
   return useMutation({
     mutationKey: ["sign-in"],
     mutationFn: (request: SignInRequest) => signIn(request),
     onSuccess: (data) => {
       toast.success(data.message || "Sign in successful");
-      useAuthStore.setState({
-        user: data.data,
-      });
+
+      // Set user and token in store
+      setUser(data.data);
+      if (data.data.token) {
+        setToken(data.data.token);
+      }
+
+      // Navigate to dashboard if user is admin, otherwise to home
+      if (data.data.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -44,6 +57,7 @@ export const useSignUpMutation = () => {
 export const useSignOutMutation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { signOut: signOutStore } = useAuthStore();
 
   return useMutation({
     mutationKey: ["sign-out"],
@@ -51,9 +65,7 @@ export const useSignOutMutation = () => {
     onSuccess: (data) => {
       toast.success(data.message || "Sign out successful");
       queryClient.clear();
-      useAuthStore.setState({
-        user: null,
-      });
+      signOutStore();
       navigate("/auth/sign-in");
     },
     onError: (error) => {

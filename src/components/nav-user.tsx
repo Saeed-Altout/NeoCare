@@ -6,6 +6,7 @@ import {
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuthStore } from "@/stores/auth-store";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -47,10 +48,11 @@ export function NavUser({
   const navigate = useNavigate();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
+  const { signOut } = useAuthStore();
+
   const handleLogout = () => {
-    // Clear any stored authentication data
-    localStorage.removeItem("auth-token");
-    localStorage.removeItem("user-data");
+    // Use auth store's signOut method
+    signOut();
 
     // Navigate to sign in page
     navigate("/auth/sign-in");

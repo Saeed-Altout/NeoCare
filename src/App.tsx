@@ -1,5 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Auth Components
+import { AuthGuard } from "@/components/auth-guard";
+import { AdminRoute } from "@/components/protected-route";
+
 // Auth Pages
 import { AuthLayout } from "@/layouts/auth";
 import { SignInPage } from "@/pages/auth/sign-in";
@@ -27,28 +31,40 @@ import { NotFoundPage } from "@/pages/not-found";
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<WebsiteLayout />}>
-          <Route index element={<HomePage />} />
-        </Route>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="sign-in" element={<SignInPage />} />
-          <Route path="sign-up" element={<SignUpPage />} />
-        </Route>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<JaundiceOverviewPage />} />
-          <Route path="overview" element={<JaundiceOverviewPage />} />
-          <Route path="patients" element={<PatientsPage />} />
-          <Route path="sessions" element={<SessionsPage />} />
-          <Route path="sessions/:sessionId" element={<SessionDetailsPage />} />
-          <Route path="arduino" element={<ArduinoControlPage />} />
-          <Route path="settings" element={<SettingsPage />} />
-          <Route path="account" element={<AccountPage />} />
-          <Route path="notifications" element={<NotificationsPage />} />
-          <Route path="legacy" element={<DashboardPage />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <AuthGuard>
+        <Routes>
+          <Route path="/" element={<WebsiteLayout />}>
+            <Route index element={<HomePage />} />
+          </Route>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route path="sign-in" element={<SignInPage />} />
+            <Route path="sign-up" element={<SignUpPage />} />
+          </Route>
+          <Route
+            path="/dashboard"
+            element={
+              <AdminRoute>
+                <DashboardLayout />
+              </AdminRoute>
+            }
+          >
+            <Route index element={<JaundiceOverviewPage />} />
+            <Route path="overview" element={<JaundiceOverviewPage />} />
+            <Route path="patients" element={<PatientsPage />} />
+            <Route path="sessions" element={<SessionsPage />} />
+            <Route
+              path="sessions/:sessionId"
+              element={<SessionDetailsPage />}
+            />
+            <Route path="arduino" element={<ArduinoControlPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="account" element={<AccountPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="legacy" element={<DashboardPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </AuthGuard>
     </BrowserRouter>
   );
 }
